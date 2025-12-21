@@ -1,0 +1,3 @@
+[submodule "app/src/main/cpp/client-resources"]
+	path = app/src/main/cpp/client-resources
+	url = https://github.com/mftalk/client

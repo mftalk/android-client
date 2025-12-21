@@ -1,9 +1,12 @@
 package org.mftalk.android_client
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import org.mftalk.android_client.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,20 +18,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Example of a call to a native method
-        binding.sampleText.text = stringFromJNI()
+        binding.sampleText.text = amberCencrypt("Welcome to MFTalk", "pizzalover122", 5374892, 991991948484874773)
+
+        binding.sampleTextInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("demoViewDebug", binding.sampleTextInput.text.toString())
+                binding.sampleText.text = amberCencrypt(binding.sampleTextInput.text.toString(), "pizzalover122", 5374892, 991991948484874773)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
-    /**
-     * A native method that is implemented by the 'android_client' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNI(): String
 
     companion object {
-        // Used to load the 'android_client' library on application startup.
         init {
             System.loadLibrary("android_client")
         }
+        @JvmStatic
+        external fun amberCencrypt(text: String, key: String, seed1: Long, seed2: Long): String
     }
 }
